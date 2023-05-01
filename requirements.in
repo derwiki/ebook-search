@@ -1,4 +1,8 @@
+matplotlib
+nltk
+numpy
 openai
 pandas
-numpy
-nltk
+plotly
+scipy
+scikit-learn
