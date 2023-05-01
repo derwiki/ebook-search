@@ -1,13 +1,16 @@
 # Overview
-This application will take an ebook and build a semantic search engine over the contents
+This application will take an ebook and build a semantic search engine over the contents.
 
 The code is all cribbed from the super helpful video 
 [5. OpenAI Embeddings API - Searching Financial Documents](https://www.youtube.com/watch?v=xzHhZh7F25I)
 by Part Time Larry.
-
-Specifically, the code came from this [iPython Notebook](https://colab.research.google.com/drive/1tttDqgnWL9yJtmlOFXJqA-BjQ1Pyfpax?usp=sharing#scrollTo=bUPM0-8iLNK0)
+* Specifically, the code came from this [iPython Notebook](https://colab.research.google.com/drive/1tttDqgnWL9yJtmlOFXJqA-BjQ1Pyfpax?usp=sharing#scrollTo=bUPM0-8iLNK0).
 
 # Usage and example
+
+For the example shown below, I took the first chapter from "Less is Lost" and dumped it into the file '
+chapter1-sunset.txt'. For copyright reasons we cannot include that input text in this repository.
+
 Everything is hardcoded, so you'll need to:
 1. Prepare the input CSV from an ebook using `sentence_formatter.py`
    1. Change the input `open()` and the output `open()` filenames
