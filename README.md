@@ -1,4 +1,9 @@
-# Overview
+# Semantic Search using OpenAI
+
+This Python program utilizes the OpenAI API to perform semantic search on a text file. It accepts two arguments: the name of the text file to search, and the search term. It then generates embeddings for each sentence in the text, compares those embeddings to the search term's embedding, and returns the top 20 matches sorted by similarity.
+
+
+## Overview
 This application will take an ebook and build a semantic search engine over the contents.
 
 The code is all cribbed from the super helpful video 
@@ -6,21 +11,17 @@ The code is all cribbed from the super helpful video
 by Part Time Larry.
 * Specifically, the code came from this [iPython Notebook](https://colab.research.google.com/drive/1tttDqgnWL9yJtmlOFXJqA-BjQ1Pyfpax?usp=sharing#scrollTo=bUPM0-8iLNK0).
 
-# Usage and example
 
-For the example shown below, I took the first chapter from "Less is Lost" and dumped it into the file '
-chapter1-sunset.txt'. For copyright reasons we cannot include that input text in this repository.
+## Usage
 
-Everything is hardcoded, so you'll need to:
-1. Prepare the input CSV from an ebook using `sentence_formatter.py`
-   1. Change the input `open()` and the output `open()` filenames
-2. In main.py, change:
-   1. The input CSV referenced in `read_csv`
-   2. The `search_term` variable
-3. Run `python main.py`
+To run the program, make sure you have the OpenAI API key in the environment variable `OPENAI_API_KEY`. Then simply pass in the text file name and search term as arguments like so:
 
 ```
-(venv) ➜ git:(main) ✗ python main.py
+python main.py ebook.txt "search term"
+```
+
+```
+(venv) ➜ git:(main) ✗ python main.py lessislost-chapter1.txt "romantic relationships ending"
 generating embeddings for book
 loading embeddings
 getting embeddings for search term: romantic relationships ending
@@ -48,3 +49,20 @@ top 20 results:
 694         694                   They drank champagne and parted.  [0.0033095034305006266, -0.01542810257524252, ...      0.788084
 475         475                          We’d just started dating.  [-0.02588159404695034, -0.013313786126673222, ...      0.787115
 ```
+
+The program will generate embeddings for the sentences in the text file if they don't already exist, and then perform the semantic search on those embeddings. The output will be the top 20 matches sorted by similarity, along with their corresponding sentences.
+
+## Dependencies
+
+The program requires the installation of the following Python packages:
+- pandas
+- numpy
+- openai
+
+These can be installed using pip:
+
+```
+pip install pandas numpy openai
+```
+
+Additionally, the program relies on a custom module called `sentence_formatter`, which is included in the repository.
