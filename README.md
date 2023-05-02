@@ -17,33 +17,50 @@ by Part Time Larry.
 To run the program, make sure you have the OpenAI API key in the environment variable `OPENAI_API_KEY`. Then simply pass in the text file name and search term as arguments like so:
 
 ```
-(venv) ➜ git:(main) ✗ python main.py lessislost-chapter1.txt "romantic relationships ending"
+(venv) ➜  ebook-search git:(main) ✗ time venv/bin/python main.py lessislost.txt "alcoholic beverages" ; say done
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+Download the required NLTK data
+[nltk_data] Downloading package punkt to /Users/adam/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+Read the ebook text file
+Discard superfluous line breaks
+Tokenize the text into sentences
+Found 10662 sentences
+Write the sentences to a CSV file
+Token indices sequence length is longer than the specified maximum sequence length for this model (12369 > 1024). Running this sequence through the model will result in indexing errors
+Skipping text with 12369 tokens, which exceeds the model's maximum context length.
 generating embeddings for book
+500 embeddings processed.
+1000 embeddings processed.
+...
+10000 embeddings processed.
+10500 embeddings processed.
 loading embeddings
-getting embeddings for search term: romantic relationships ending
+getting embeddings for search term: alcoholic beverages
 finding sentences similar to search term
 top 20 results:
-     Unnamed: 0                                               text                                          embedding  similarities
-696         696                 Just like that, the love was over.  [-0.0064529250375926495, -0.015399391762912273...      0.836687
-369         369  In the middle of their time together as a coup...  [0.004660928621888161, -0.019074782729148865, ...      0.818846
-543         543  I’m so sorry.”  I explained that not every rel...  [-0.030615320429205894, 0.000493743282277137, ...      0.812686
-692         692  Twenty years a couple, they suddenly announced...  [-0.01228040549904108, -0.006871253717690706, ...      0.808795
-86           86  The famous poet Robert Brownburn; easy for him...  [-0.02290256693959236, -0.007946318946778774, ...      0.807237
-27           27            Doves within a cage cooed romantically.  [-0.029864875599741936, -0.026972133666276932,...      0.805637
-373         373                           They were still in love.  [-0.0003517003497108817, -0.010070735588669777...      0.802216
-0             0  LESS should have known, at the clinic a few we...  [-0.00749213295057416, 0.006945409812033176, 0...      0.801186
-288         288  And with Less, she is talking about his and Ro...  [-0.03143167123198509, 0.002833976410329342, 0...      0.799768
-526         526  Back when Less did not know if he deserved to ...  [-0.0036562231834977865, 0.0002235552383353933...      0.796240
-18           18  This clumsiness of the heart also became appar...  [-0.0009649221901781857, 0.002075009746477008,...      0.796202
-42           42                    Nine months of unmarital bliss.  [-0.0063613178208470345, -0.020452434197068214...      0.795985
-700         700  “We took each other as far as we could.” Is th...  [-0.005477485246956348, -0.007059574127197266,...      0.794903
-214         214  Marian looks still lively but despairing, like...  [-0.03386417776346207, -0.029376782476902008, ...      0.792012
-362         362  Less remembers evenings up in a cabin, card ga...  [-0.0005376689950935543, -0.0115670096129179, ...      0.790500
-613         613  The reception has ended, the Russian River Sch...  [-0.02422231063246727, -0.0009064676123671234,...      0.790403
-423         423  Robert is being moved into his private grotto ...  [-0.018788842484354973, -0.008001681417226791,...      0.788506
-46           46  Less never pressed for more than a kiss goodby...  [-0.016261950135231018, -0.01728760078549385, ...      0.788178
-694         694                   They drank champagne and parted.  [0.0033095034305006266, -0.01542810257524252, ...      0.788084
-475         475                          We’d just started dating.  [-0.02588159404695034, -0.013313786126673222, ...      0.787115
+      Unnamed: 0                                               text                                          embedding  similarities
+289          289                     And remember to drink alcohol.  [0.010054944083094597, -0.010920019820332527, ...      0.842849
+2795        2795   When it comes to drinking, should we know no no?  [0.020439572632312775, -0.021846452727913857, ...      0.819814
+3744        3744  With their beers and snacks on their laps, eat...  [0.01141290832310915, -0.018857283517718315, 0...      0.816803
+1589        1589                             They were quite drunk.  [0.002823491347953677, -0.012792474590241909, ...      0.815624
+3871        3871                   The other gets Southern Comfort.  [0.008989846333861351, -0.017885204404592514, ...      0.808843
+7249        7249  Drinking even a small amount of hand sanitizer...  [0.03205445036292076, 0.0026009646244347095, 0...      0.808286
+9897        9897  Addictions to alcohol overindulgence and drugs...  [0.014888299629092216, -0.005606885068118572, ...      0.808227
+1583        1583  The other arrived late, in a light blue sweate...  [-0.0009539441671222448, -0.02703011780977249,...      0.804221
+2593        2593  My ex-husband, for one.” She reemerges with a ...  [0.004508504644036293, -0.02552058733999729, -...      0.803345
+873          873  Less manages to make himself a mini-cocktail b...  [-0.012840939685702324, -0.016079911962151527,...      0.803327
+581          581                                   Another bourbon.  [-0.004019715823233128, -0.008585800416767597,...      0.801514
+838          838  An offer of wine and Less shivers at the impos...  [0.005081620067358017, -0.03446187824010849, -...      0.800690
+1223        1223  We had apparently brought with us only the cas...  [0.02989587001502514, -0.01232936792075634, 0....      0.799524
+3329        3329  I made my way through the academics looking fo...  [0.006479981821030378, -0.026723962277173996, ...      0.798036
+2637        2637  In curly dark hair and red glasses, but surely...  [-0.003154703648760915, -0.025602824985980988,...      0.797717
+2564        2564  She points her finger at our hero to make one ...  [-0.00880262441933155, -0.02387617528438568, -...      0.797695
+2288        2288  Less finds himself being led down the road to ...  [-0.011682722717523575, -0.007981733419001102,...      0.797487
+1230        1230  For four cans of Dewey beer and assistance in ...  [0.014380093663930893, 0.004230041988193989, 0...      0.796130
+3692        3692  Rebecca is wrapped in a blanket and has brough...  [0.007203337736427784, -0.018650192767381668, ...      0.794228
+1581        1581  Let us savor the scene in all its details: The...  [-0.0007753131212666631, -0.010730543173849583...      0.794010
+venv/bin/python main.py lessislost.txt "alcoholic beverages"  63.13s user 9.61s system 26% cpu 4:35.34 total
 ```
 
 The program will generate embeddings for the sentences in the text file if they don't already exist, and then perform the semantic search on those embeddings. The output will be the top 20 matches sorted by similarity, along with their corresponding sentences.

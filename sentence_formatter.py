@@ -4,10 +4,17 @@ import re
 
 from nltk.tokenize import sent_tokenize
 import nltk
+from transformers import GPT2Tokenizer
+
+# Initialize the GPT-2 tokenizer
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 
 def text_to_sentence_csv(input_text_file: str) -> str:
     """
+    Converts text to CSV with one line per sentence.
+    Discards sentences that exceed the get_embedding token limit.
+
     :param input_text_file:
     :return: string value of the path for the output CSV file
     """
@@ -28,7 +35,6 @@ def text_to_sentence_csv(input_text_file: str) -> str:
 
     print('Discard superfluous line breaks')
     text = re.sub(r'\n(?:\s*\n)*(?=[a-z])', ' ', text)
-    # text = re.sub(r'\n(?=[a-z])', ' ', text)
 
     print('Tokenize the text into sentences')
     sentences = sent_tokenize(text)
@@ -39,6 +45,13 @@ def text_to_sentence_csv(input_text_file: str) -> str:
         writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
         csvfile.write('text\n')
         for sentence in sentences:
-            # sentences that set up dialog have newlines; strip them
-            writer.writerow([sentence.replace('\n', ' ')])
+            token_ids = tokenizer.encode(sentence, return_tensors=None)
+            token_count = len(token_ids)
+
+            # Check if the token count is greater than the model's maximum context length
+            if token_count > 8191:
+                print(f"Skipping text with {token_count} tokens, which exceeds the model's maximum context length.")
+            else:
+                # sentences that set up dialog have newlines; strip them
+                writer.writerow([sentence.replace('\n', ' ')])
     return output_csv_filename
