@@ -17,10 +17,6 @@ by Part Time Larry.
 To run the program, make sure you have the OpenAI API key in the environment variable `OPENAI_API_KEY`. Then simply pass in the text file name and search term as arguments like so:
 
 ```
-python main.py ebook.txt "search term"
-```
-
-```
 (venv) ➜ git:(main) ✗ python main.py lessislost-chapter1.txt "romantic relationships ending"
 generating embeddings for book
 loading embeddings
@@ -55,14 +51,21 @@ The program will generate embeddings for the sentences in the text file if they 
 ## Dependencies
 
 The program requires the installation of the following Python packages:
-- pandas
+- matplotlib
+- nltk
 - numpy
 - openai
+- pandas
+- plotly
+- ratelimit
+- scipy
+- scikit-learn
+
 
 These can be installed using pip:
 
 ```
-pip install pandas numpy openai
+pip install matplotlib nltk numpy openai pandas plotly ratelimit scipy scikit-learn
 ```
 
 Additionally, the program relies on a custom module called `sentence_formatter`, which is included in the repository.
