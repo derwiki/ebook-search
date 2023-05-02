@@ -1,4 +1,6 @@
 import sys
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 import openai
@@ -12,11 +14,28 @@ from sentence_formatter import text_to_sentence_csv
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
+MAX_WORKERS = 64
+counter = 0
+counter_lock = threading.Lock()
+requests_semaphore = threading.Semaphore(2700)
+reset_interval = 60  # in seconds
+
 
 def apply_get_embedding(text):
-    result = get_embedding(text, engine='text-embedding-ada-002')
-    print(f'finished embedding')
-    return result
+    global counter
+    with requests_semaphore:
+        result = get_embedding(text, engine='text-embedding-ada-002')
+        with counter_lock:
+            counter += 1
+            if counter % 500 == 0:
+                print(f"{counter} embeddings processed.")
+        return result
+
+
+def reset_semaphore():
+    while True:
+        time.sleep(reset_interval)
+        requests_semaphore.release(2700)
 
 
 def semantic_search(text_filename: str, search_term: str):
@@ -31,7 +50,12 @@ def semantic_search(text_filename: str, search_term: str):
 
     if not os.path.exists(embeddings_filename):
         print('generating embeddings for book')
-        with ThreadPoolExecutor(max_workers=64) as executor:
+
+        reset_thread = threading.Thread(target=reset_semaphore)
+        reset_thread.daemon = True
+        reset_thread.start()
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             embeddings = list(executor.map(apply_get_embedding, df['text']))
         df['embedding'] = embeddings
         df.to_csv(embeddings_filename)

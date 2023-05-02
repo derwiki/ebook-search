@@ -16,7 +16,7 @@ def text_to_sentence_csv(input_text_file: str) -> str:
 
     output_csv_filename = input_text_file.replace(".txt", ".csv")
     if os.path.exists(output_csv_filename):
-        print('CSV already exists, reusing)')
+        print('CSV already exists, reusing')
         return output_csv_filename
 
     print('Download the required NLTK data')
