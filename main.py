@@ -10,6 +10,7 @@ import os
 from openai.embeddings_utils import get_embedding
 from openai.embeddings_utils import cosine_similarity
 from ratelimit import limits, sleep_and_retry
+from transformers import GPT2Tokenizer
 
 from sentence_formatter import text_to_sentence_csv
 
@@ -23,6 +24,9 @@ counter_lock = threading.Lock()
 rate_limit = 2700
 tokens_per_second = int(rate_limit / 60)
 
+# Initialize the GPT-2 tokenizer
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+
 
 @sleep_and_retry
 @limits(calls=tokens_per_second, period=1)
@@ -31,6 +35,14 @@ def call_with_ratelimit():
 
 
 def apply_get_embedding(text):
+    token_ids = tokenizer.encode(text, return_tensors=None)
+    token_count = len(token_ids)
+
+    # Check if the token count is greater than the model's maximum context length
+    if token_count > 8191:
+        print(f"Skipping text with {token_count} tokens, which exceeds the model's maximum context length.")
+        return None
+
     global counter
     call_with_ratelimit()  # Wait for a token to become available
     result = get_embedding(text, engine='text-embedding-ada-002')
