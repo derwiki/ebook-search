@@ -9,6 +9,7 @@ import numpy as np
 import os
 from openai.embeddings_utils import get_embedding
 from openai.embeddings_utils import cosine_similarity
+from ratelimit import limits, sleep_and_retry
 
 from sentence_formatter import text_to_sentence_csv
 
@@ -17,25 +18,27 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 MAX_WORKERS = 64
 counter = 0
 counter_lock = threading.Lock()
-requests_semaphore = threading.Semaphore(2700)
-reset_interval = 60  # in seconds
+
+# Rate limiter setup
+rate_limit = 2700
+tokens_per_second = int(rate_limit / 60)
+
+
+@sleep_and_retry
+@limits(calls=tokens_per_second, period=1)
+def call_with_ratelimit():
+    pass
 
 
 def apply_get_embedding(text):
     global counter
-    with requests_semaphore:
-        result = get_embedding(text, engine='text-embedding-ada-002')
-        with counter_lock:
-            counter += 1
-            if counter % 500 == 0:
-                print(f"{counter} embeddings processed.")
-        return result
-
-
-def reset_semaphore():
-    while True:
-        time.sleep(reset_interval)
-        requests_semaphore.release(2700)
+    call_with_ratelimit()  # Wait for a token to become available
+    result = get_embedding(text, engine='text-embedding-ada-002')
+    with counter_lock:
+        counter += 1
+        if counter % 500 == 0:
+            print(f"{counter} embeddings processed.")
+    return result
 
 
 def semantic_search(text_filename: str, search_term: str):
@@ -50,11 +53,6 @@ def semantic_search(text_filename: str, search_term: str):
 
     if not os.path.exists(embeddings_filename):
         print('generating embeddings for book')
-
-        reset_thread = threading.Thread(target=reset_semaphore)
-        reset_thread.daemon = True
-        reset_thread.start()
-
         with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             embeddings = list(executor.map(apply_get_embedding, df['text']))
         df['embedding'] = embeddings

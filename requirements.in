@@ -4,5 +4,6 @@ numpy
 openai
 pandas
 plotly
+ratelimit
 scipy
 scikit-learn
