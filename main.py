@@ -1,4 +1,5 @@
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 import openai
 import pandas as pd
@@ -10,6 +11,12 @@ from openai.embeddings_utils import cosine_similarity
 from sentence_formatter import text_to_sentence_csv
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
+
+
+def apply_get_embedding(text):
+    result = get_embedding(text, engine='text-embedding-ada-002')
+    print(f'finished embedding')
+    return result
 
 
 def semantic_search(text_filename: str, search_term: str):
@@ -24,7 +31,9 @@ def semantic_search(text_filename: str, search_term: str):
 
     if not os.path.exists(embeddings_filename):
         print('generating embeddings for book')
-        df['embedding'] = df['text'].apply(lambda x: get_embedding(x, engine='text-embedding-ada-002'))
+        with ThreadPoolExecutor(max_workers=64) as executor:
+            embeddings = list(executor.map(apply_get_embedding, df['text']))
+        df['embedding'] = embeddings
         df.to_csv(embeddings_filename)
 
     print('loading embeddings')
