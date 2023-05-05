@@ -19,7 +19,7 @@ counter = 0
 counter_lock = threading.Lock()
 
 # Rate limiter setup
-rate_limit = 2700
+rate_limit = int(os.getenv('OPENAI_RATE_LIMIT', 2700))
 tokens_per_second = int(rate_limit / 60)
 
 
