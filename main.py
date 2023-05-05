@@ -47,6 +47,7 @@ def semantic_search(text_filename: str, search_term: str):
     # use sentence_formatter to generate CSV from text
     csv_filename = text_to_sentence_csv(text_filename)
     df = pd.read_csv(csv_filename)
+    df.dropna(inplace=True)
     text_file_prefix = text_filename.replace('.txt', '')
     embeddings_filename = f'{text_file_prefix}_word_embeddings.csv'
 
